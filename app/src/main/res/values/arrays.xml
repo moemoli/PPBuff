@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="xposedscope">
+    <string-array name="scope">
         <item>cn.xiaochuankeji.zuiyouLite</item>
-        <item>cn.xiaochuankeji.tieba</item>
     </string-array>
 </resources>
