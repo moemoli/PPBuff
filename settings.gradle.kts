@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://api.xposed.info/")
         maven("https://jitpack.io/")
+        maven("https://androidx.dev/snapshots/builds/13956154/artifacts/repository/")
     }
 }
 

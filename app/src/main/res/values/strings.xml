@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">PPBuff</string>
     <string name="desc">Debuff for officials</string>
+    <string name="activated">已激活</string>
+    <string name="noactive">未激活</string>
 </resources>
