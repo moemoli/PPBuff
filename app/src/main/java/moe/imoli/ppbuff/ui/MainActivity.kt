@@ -13,10 +13,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.EntryProvider
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import moe.imoli.ppbuff.ui.page.AboutUI
+import moe.imoli.ppbuff.ui.page.AppSettingUI
 import moe.imoli.ppbuff.ui.page.AppsUI
 import moe.imoli.ppbuff.ui.page.MainUI
 import moe.imoli.ppbuff.ui.theme.PPBuffTheme
@@ -34,8 +34,9 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 ) { padding ->
                     BoxWithConstraints {
-                        val backStack = remember { mutableStateListOf<Any>(if (maxWidth < maxHeight) MainUI else AppsUI) }
-                        val entryProvider: (key: Any) -> NavEntry<Any> = { key->
+                        val backStack =
+                            remember { mutableStateListOf(if (maxWidth < maxHeight) MainUI else AppsUI) }
+                        val entryProvider: (key: Any) -> NavEntry<Any> = { key ->
                             when (key) {
                                 is MainUI -> NavEntry(key) {
                                     MainUI.view(backStack = backStack)
@@ -46,8 +47,13 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 is AppsUI -> NavEntry(key) {
-                                    AppsUI.view(backStack = backStack)
+                                    key.view(backStack = backStack)
                                 }
+
+                                is AppSettingUI -> NavEntry(key) {
+                                    key.view(backStack = backStack)
+                                }
+
                                 else -> error("Not implemented yet route $key")
                             }
                         }
@@ -61,7 +67,7 @@ class MainActivity : ComponentActivity() {
                             )
                         } else {
                             // 平板
-                            MainUI.tablet(modifier = Modifier.padding(padding)) {
+                            MainUI.tablet(modifier = Modifier.padding(padding), backStack = backStack) {
                                 NavDisplay(
                                     modifier = it.fillMaxSize(),
                                     backStack = backStack,

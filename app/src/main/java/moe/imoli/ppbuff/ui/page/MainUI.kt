@@ -1,6 +1,7 @@
 package moe.imoli.ppbuff.ui.page
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import moe.imoli.ppbuff.R
+import moe.imoli.ppbuff.app.data.ValidApps
 
 object MainUI {
 
@@ -35,7 +35,7 @@ object MainUI {
 
 
     @Composable
-    fun view(modifier: Modifier = Modifier, menu: Boolean = true, backStack: MutableList<Any> = mutableStateListOf()) {
+    fun view(modifier: Modifier = Modifier, backStack: MutableList<Any> = mutableListOf()) {
         Column(
             modifier = modifier
                 .fillMaxSize()// 填充屏幕
@@ -49,7 +49,14 @@ object MainUI {
                 modifier = Modifier.padding(top = 10.dp),
                 bottom = false
             ) {
-                backStack.add(AppsUI)
+
+
+                if (backStack.find { it is AppsUI } != null) {
+                    while (backStack.last() !is AppsUI) {
+                        backStack.removeLastOrNull()
+                    }
+                } else
+                    backStack.add(AppsUI)
             }
             clickBoard(
                 text = "设置",
@@ -62,7 +69,12 @@ object MainUI {
                 text = "关于",
                 top = false
             ) {
-                backStack.add(AboutUI)
+                if (backStack.find { it is AboutUI } != null) {
+                    while (backStack.last() !is AboutUI) {
+                        backStack.removeLastOrNull()
+                    }
+                } else
+                    backStack.add(AboutUI)
             }
 
             sponsor(modifier = Modifier.padding(top = 20.dp))
@@ -91,7 +103,7 @@ object MainUI {
                     .width(400.dp)
 
             ) {
-                view(modifier = Modifier.padding(10.dp))
+                view(modifier = Modifier.padding(10.dp), backStack = backStack)
             }
 
             Column(
@@ -113,27 +125,34 @@ object MainUI {
                 //verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 返回导航
-                Row(
-                    modifier = Modifier.padding(top = 15.dp)
-                        .padding(horizontal = 15.dp)
-                        .height(24.dp)
-                        .fillMaxWidth()
+
+                AnimatedVisibility(
+                    visible = backStack.size > 1
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_arrow),
-                        contentDescription = null,
-                        modifier = Modifier.size(imgSize)
-                            .rotate(180f)
-                            .clickable(
-                                indication = null,
-                                onClick = {
-                                    backStack.removeLastOrNull()
-                                },
-                                interactionSource = remember { MutableInteractionSource() },
-                            )
-                    )
+                    // 返回导航
+                    Row(
+                        modifier = Modifier.padding(top = 15.dp)
+                            .padding(horizontal = 15.dp)
+                            .height(24.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_arrow),
+                            contentDescription = null,
+                            modifier = Modifier.size(imgSize)
+                                .rotate(180f)
+                                .clickable(
+                                    indication = null,
+                                    onClick = {
+                                        backStack.removeLastOrNull()
+                                    },
+                                    interactionSource = remember { MutableInteractionSource() },
+                                )
+                        )
+                    }
                 }
+
+
                 compose(
                     Modifier.padding(horizontal = 15.dp, vertical = 15.dp)
                         .fillMaxSize()
@@ -255,7 +274,7 @@ object MainUI {
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 25.dp),
-                    style =  MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
@@ -353,6 +372,7 @@ object MainUI {
 @Composable
 fun Preview_MainUI() {
     MainUI.tablet {
-        AppsUI.view(it)
+        AppSettingUI(ValidApps.apps[0]).view(it)
+
     }
 }
