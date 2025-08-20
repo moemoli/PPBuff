@@ -38,4 +38,8 @@
                 android:resource="@array/scope"/>
     </application>
 
+    <queries>
+        <package android:name="cn.xiaochuankeji.zuiyouLite"/>
+    </queries>
+
 </manifest>

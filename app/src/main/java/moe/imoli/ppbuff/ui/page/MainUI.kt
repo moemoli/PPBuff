@@ -4,14 +4,18 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,7 +49,7 @@ object MainUI {
                 modifier = Modifier.padding(top = 10.dp),
                 bottom = false
             ) {
-                //backStack.add(AboutUI)
+                backStack.add(AppsUI)
             }
             clickBoard(
                 text = "设置",
@@ -58,7 +62,7 @@ object MainUI {
                 text = "关于",
                 top = false
             ) {
-                //backStack.add(AboutUI)
+                backStack.add(AboutUI)
             }
 
             sponsor(modifier = Modifier.padding(top = 20.dp))
@@ -66,7 +70,11 @@ object MainUI {
     }
 
     @Composable
-    fun tablet(modifier: Modifier = Modifier, compose: @Composable (modifier: Modifier) -> Unit) {
+    fun tablet(
+        modifier: Modifier = Modifier,
+        backStack: MutableList<Any> = mutableListOf(),
+        compose: @Composable (modifier: Modifier) -> Unit
+    ) {
         // 左边状态，右边应用选择
         Row(
             modifier = modifier
@@ -75,13 +83,9 @@ object MainUI {
             Column(
                 modifier = Modifier
                     .padding(
-                        top = 20.dp,
+                        top = 35.dp,
                         start = 30.dp,
                         end = 30.dp
-                    )
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(size)
                     )
                     .fillMaxHeight()// 填充屏幕
                     .width(400.dp)
@@ -93,21 +97,46 @@ object MainUI {
             Column(
                 modifier = Modifier
                     .padding(
-                        //bottom = 30.dp,
+                        bottom = 20.dp,
                         top = 20.dp,
                         end = 30.dp
+                    )
+                    .shadow(
+                        elevation = 5.dp,
+                        shape = RoundedCornerShape(size),
                     )
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = RoundedCornerShape(size)
                     )
                     .fillMaxSize(),// 填充屏幕
-                verticalArrangement = Arrangement.Center,
+                //verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // 返回导航
+                Row(
+                    modifier = Modifier.padding(top = 15.dp)
+                        .padding(horizontal = 15.dp)
+                        .height(24.dp)
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_arrow),
+                        contentDescription = null,
+                        modifier = Modifier.size(imgSize)
+                            .rotate(180f)
+                            .clickable(
+                                indication = null,
+                                onClick = {
+                                    backStack.removeLastOrNull()
+                                },
+                                interactionSource = remember { MutableInteractionSource() },
+                            )
+                    )
+                }
                 compose(
-                    modifier.padding(top = 25.dp)
-                        .padding(horizontal = paddingHorizontal)
+                    Modifier.padding(horizontal = 15.dp, vertical = 15.dp)
+                        .fillMaxSize()
                 )
             }
         }
@@ -318,8 +347,10 @@ object MainUI {
 
 }
 
-@Preview
+@Preview(showBackground = true, widthDp = 1024, heightDp = 720)
 @Composable
 fun Preview_MainUI() {
-    MainUI.view()
+    MainUI.tablet {
+        AppsUI.view(it)
+    }
 }
