@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
+    <queries>
+        <package android:name="cn.xiaochuankeji.zuiyouLite"/>
+    </queries>
+
     <application
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"
@@ -38,8 +42,5 @@
                 android:resource="@array/scope"/>
     </application>
 
-    <queries>
-        <package android:name="cn.xiaochuankeji.zuiyouLite"/>
-    </queries>
 
 </manifest>

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -73,6 +72,7 @@ class AppSettingUI(val data: ValidApp) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val modifier = Modifier.weight(1f)
+            var enable by remember { mutableStateOf(value) }
             Text(
                 text = name,
                 modifier = modifier,
@@ -83,7 +83,10 @@ class AppSettingUI(val data: ValidApp) {
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Switch(value, onChange)
+                Switch(enable, onCheckedChange = {
+                    enable = it
+                    onChange(it)
+                })
             }
 
         }

@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import moe.imoli.ppbuff.ui.page.AboutUI
@@ -39,19 +40,28 @@ class MainActivity : ComponentActivity() {
                         val entryProvider: (key: Any) -> NavEntry<Any> = { key ->
                             when (key) {
                                 is MainUI -> NavEntry(key) {
-                                    MainUI.view(backStack = backStack)
+                                    key.view(backStack = backStack)
                                 }
 
                                 is AboutUI -> NavEntry(key) {
-                                    AboutUI.view(backStack = backStack)
+                                    key.view(
+                                        modifier = Modifier.padding(horizontal = 15.dp),
+                                        backStack = backStack
+                                    )
                                 }
 
                                 is AppsUI -> NavEntry(key) {
-                                    key.view(backStack = backStack)
+                                    key.view(
+                                        modifier = Modifier.padding(horizontal = 15.dp),
+                                        backStack = backStack
+                                    )
                                 }
 
                                 is AppSettingUI -> NavEntry(key) {
-                                    key.view(backStack = backStack)
+                                    key.view(
+                                        modifier = Modifier.padding(horizontal = 15.dp),
+                                        backStack = backStack
+                                    )
                                 }
 
                                 else -> error("Not implemented yet route $key")

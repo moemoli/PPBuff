@@ -1,5 +1,8 @@
 package moe.imoli.ppbuff.ui.page
 
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -17,13 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.highcapable.yukihookapi.YukiHookAPI
 import moe.imoli.ppbuff.R
-import moe.imoli.ppbuff.app.data.ValidApps
+import moe.imoli.ppbuff.utils.openUrl
 
 object MainUI {
 
@@ -33,6 +37,7 @@ object MainUI {
     private val paddingVertically = 12.dp
     private val imgPadding = 25.dp
     private val textPaddingImg = 20.dp
+    private val handler = Handler(Looper.getMainLooper())
 
 
     @Composable
@@ -158,7 +163,7 @@ object MainUI {
 
 
                 compose(
-                    Modifier.padding(horizontal = 15.dp, vertical = 15.dp)
+                    Modifier.padding(vertical = 15.dp)
                         .fillMaxSize()
                 )
             }
@@ -168,6 +173,7 @@ object MainUI {
 
     @Composable
     fun sponsor(modifier: Modifier = Modifier) {
+        val ctx = LocalContext.current
         Column(
             modifier = modifier.padding(horizontal = paddingHorizontal)
                 .fillMaxWidth()
@@ -214,19 +220,26 @@ object MainUI {
                 // alipay
                 Image(
                     painter = painterResource(R.drawable.ic_alipay),
-                    modifier = modifier.size(40.dp),
+                    modifier = modifier.size(40.dp).clickable {
+                        ctx.openUrl("https://qr.alipay.com/fkx14993unapme7maimi245")
+                    },
                     contentDescription = null
                 )
                 // wechat
                 Image(
                     painter = painterResource(R.drawable.ic_wechat),
-                    modifier = modifier.size(40.dp),
+                    modifier = modifier.size(40.dp)
+                        .clickable {
+                            ctx.openUrl("wxp://f2f0SJzwy0tIWH-Dt0rmuMkpRqDpFxt9D_hrlsKW7yF-z-h-JtzNRaFjv1g_1BLaQYe4")
+                        },
                     contentDescription = null
                 )
                 // paypal
                 Image(
                     painter = painterResource(R.drawable.ic_paypal),
-                    modifier = modifier.size(40.dp),
+                    modifier = modifier.size(40.dp).clickable {
+                        Toast.makeText(ctx,"暂不支持",Toast.LENGTH_LONG).show()
+                    },
                     contentDescription = null
                 )
             }
@@ -363,8 +376,8 @@ object MainUI {
 
     @DrawableRes
     fun caseIcon(name: String): Int {
-        return when (name) {
-            "Lsposed" -> R.drawable.ic_lsposed
+        return when (name.lowercase()) {
+            "lsposed" -> R.drawable.ic_lsposed
             else -> R.drawable.ic_unknown
         }
     }
@@ -372,11 +385,8 @@ object MainUI {
 
 }
 
-@Preview(showBackground = true, widthDp = 1024, heightDp = 720)
+@Preview(showBackground = true)
 @Composable
 fun Preview_MainUI() {
-    MainUI.tablet {
-        AppSettingUI(ValidApps.apps[0]).view(it)
 
-    }
 }

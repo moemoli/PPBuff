@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import moe.imoli.ppbuff.R
 import androidx.core.graphics.createBitmap
+import com.highcapable.yukihookapi.hook.log.YLog
 import moe.imoli.ppbuff.app.data.ValidApps
 
 object AppsUI {
@@ -33,15 +34,20 @@ object AppsUI {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun view(modifier: Modifier = Modifier, backStack: MutableList<Any> = mutableStateListOf()) {
-        val apps = mutableListOf<ApplicationInfo>()
-        var state by remember { mutableStateOf(0) }// 改变就更新一次
+        val apps = remember { mutableStateListOf<ApplicationInfo>() }
+        var state by remember { mutableIntStateOf(0) }// 改变就更新一次
         var refresh by remember { mutableStateOf(false) }// 刷新状态
         val ctx = LocalContext.current
         // 更新应用列表
         LaunchedEffect(state) {
             apps.clear()
-            apps.addAll(ctx.packageManager.getInstalledApplications(0))
-            delay(2000)
+            ctx.packageManager.getInstalledApplications(0).forEach {
+                if (ValidApps.validApp(it.packageName)) {
+                    apps.add(it)
+                }
+            }
+            YLog.info("Found ${apps.size} apps")
+            delay(1500)
             refresh = false
         }
 
@@ -59,6 +65,12 @@ object AppsUI {
                 if (apps.isNotEmpty()) {
                     items(apps) { app ->
                         val icon = app.loadIcon(ctx.packageManager)
+                        val bitmap = createBitmap(icon.intrinsicWidth, icon.intrinsicHeight)
+                            .apply {
+                                val canvas = Canvas(this)
+                                icon.setBounds(0, 0, canvas.width, canvas.height)
+                                icon.draw(canvas)
+                            }
                         val data = ValidApps.validData(app.packageName)
                         Row(
                             modifier = Modifier
@@ -74,32 +86,24 @@ object AppsUI {
                         ) {
 
                             Image(
-                                bitmap = createBitmap(icon.intrinsicWidth, icon.intrinsicHeight)
-                                    .apply {
-                                        val canvas = Canvas(this)
-                                        icon.setBounds(0, 0, canvas.width, canvas.height)
-                                        icon.draw(canvas)
-                                    }
-                                    .asImageBitmap(),
+                                bitmap = bitmap.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier.size(40.dp)
                                     .clip(shape = RoundedCornerShape(5.dp)),
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
+                                //colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
                             )
                             Column(
                                 modifier = Modifier
                                     .padding(horizontal = 10.dp)
                                     .fillMaxWidth(),
                             ) {
-
                                 Text(
-                                    text = app.name,
-
+                                    text = app.loadLabel(ctx.packageManager).toString(),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                                 Text(
-                                    text = if (data != null) "${data.maxVersion} - ${data.maxVersion}" else "暂未适配",
+                                    text = if (data != null) "${data.maxVersionName} - ${data.minVersionName}" else "暂未适配",
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )

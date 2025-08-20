@@ -3,13 +3,7 @@ package moe.imoli.ppbuff.ui.page
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,17 +12,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import moe.imoli.ppbuff.R
+import moe.imoli.ppbuff.utils.openUrl
 
 object AboutUI {
 
 
     @Composable
     fun view(modifier: Modifier = Modifier, backStack: MutableList<Any> = mutableStateListOf()) {
-
+        val ctx = LocalContext.current
         Column(
             modifier = modifier.fillMaxSize(),
             //verticalArrangement = Arrangement.Center,
@@ -60,6 +56,7 @@ object AboutUI {
                 horizontalArrangement = Arrangement.Center
             ) {
                 val source = remember { MutableInteractionSource() }
+
                 Image(
                     painter = painterResource(R.drawable.ic_github),
                     contentDescription = null,
@@ -69,7 +66,7 @@ object AboutUI {
                             indication = null,
                             interactionSource = source,
                             onClick = {
-
+                                ctx.openUrl("https://github.com/moemoli/PPBuff")
                             }),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
@@ -83,7 +80,7 @@ object AboutUI {
                             indication = null,
                             interactionSource = source,
                             onClick = {
-
+                                ctx.openUrl("mqqapi://card/show_pslcard?src_type=internal&version=1&card_type=group&uin=1057214685")
                             }),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
@@ -97,7 +94,7 @@ object AboutUI {
                             indication = null,
                             interactionSource = source,
                             onClick = {
-
+                                //ctx.openUrl("https://github.com/moemoli/PPBuff")
                             }),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
