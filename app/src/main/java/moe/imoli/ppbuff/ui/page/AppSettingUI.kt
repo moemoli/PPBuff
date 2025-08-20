@@ -35,31 +35,32 @@ class AppSettingUI(val data: ValidApp) {
                 .height(50.dp),
         ) {
             items(data.settings) { setting ->
-                when (setting.type) {
-                    SWITCH -> {
-                        switch(setting.name, setting.value as Boolean) { value ->
-                            setting.save(value)
+                if (setting.visible)
+                    when (setting.type) {
+                        SWITCH -> {
+                            switch(setting.name, setting.value as Boolean) { value ->
+                                setting.save(value)
+                            }
                         }
-                    }
 
-                    SELECT -> {
-                        select(setting.name, setting.value, mutableListOf("A", "B", "C")) {
-                            setting.clickable()
+                        SELECT -> {
+                            select(setting.name, setting.value, mutableListOf("A", "B", "C")) {
+                                setting.clickable()
+                            }
                         }
-                    }
 
-                    INPUT_NUM -> {
-                        silde(setting.name, setting.value as Float, setting.range) { value ->
-                            setting.save(value)
+                        INPUT_NUM -> {
+                            silde(setting.name, setting.value as Float, setting.range) { value ->
+                                setting.save(value)
+                            }
                         }
-                    }
 
-                    INPUT_STR -> {
-                        input(setting.name, "abc" as String) { value ->
-                            setting.save(value)
+                        INPUT_STR -> {
+                            input(setting.name, "abc" as String) { value ->
+                                setting.save(value)
+                            }
                         }
                     }
-                }
             }
         }
 

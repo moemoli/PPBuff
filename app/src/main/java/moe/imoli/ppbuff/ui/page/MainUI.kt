@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.highcapable.yukihookapi.YukiHookAPI
 import moe.imoli.ppbuff.R
 import moe.imoli.ppbuff.app.data.ValidApps
 
@@ -41,7 +42,10 @@ object MainUI {
                 .fillMaxSize()// 填充屏幕
         ) {
             // 跳转选择
-            statusBoard()
+            statusBoard(
+                status = YukiHookAPI.Status.isModuleActive,
+                name = YukiHookAPI.Status.Executor.name
+            )
 
 
             clickBoard(
