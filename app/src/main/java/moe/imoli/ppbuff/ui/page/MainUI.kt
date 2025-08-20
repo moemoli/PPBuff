@@ -173,6 +173,7 @@ object MainUI {
                 Text(
                     text = "赞助 - 开发不易，您的赞助就是我的动力",
                     modifier = Modifier.padding(start = textPaddingImg),
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -254,6 +255,7 @@ object MainUI {
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 25.dp),
+                    style =  MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
@@ -318,13 +320,13 @@ object MainUI {
                         Text(
                             text = if (status) stringResource(R.string.activated)
                             else stringResource(R.string.noactive),
-                            fontSize = 17.sp,
+                            style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                         if (status) {
                             Text(
                                 text = name,
-                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
