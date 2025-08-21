@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.highcapable.yukihookapi.YukiHookAPI
 import moe.imoli.ppbuff.R
+import moe.imoli.ppbuff.utils.ActiveStatus
 import moe.imoli.ppbuff.utils.openUrl
 
 object MainUI {
@@ -42,14 +43,24 @@ object MainUI {
 
     @Composable
     fun view(modifier: Modifier = Modifier, backStack: MutableList<Any> = mutableListOf()) {
+        val ctx = LocalContext.current
         Column(
             modifier = modifier
                 .fillMaxSize()// 填充屏幕
         ) {
             // 跳转选择
+            var status = YukiHookAPI.Status.isModuleActive
+            var name = YukiHookAPI.Status.Executor.name
+
+            if (!status) {
+                status = ActiveStatus.isModuleActive(ctx)
+                if (status) name = "LSPatch"
+
+            }
+
             statusBoard(
-                status = YukiHookAPI.Status.isModuleActive,
-                name = YukiHookAPI.Status.Executor.name
+                status = status,
+                name = name
             )
 
 
@@ -238,7 +249,7 @@ object MainUI {
                 Image(
                     painter = painterResource(R.drawable.ic_paypal),
                     modifier = modifier.size(40.dp).clickable {
-                        Toast.makeText(ctx,"暂不支持",Toast.LENGTH_LONG).show()
+                        Toast.makeText(ctx, "暂不支持", Toast.LENGTH_LONG).show()
                     },
                     contentDescription = null
                 )

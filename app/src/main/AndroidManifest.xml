@@ -4,6 +4,8 @@
 
     <queries>
         <package android:name="cn.xiaochuankeji.zuiyouLite"/>
+        <package android:name="org.lsposed.npatch"/>
+        <package android:name="org.lsposed.lspatch"/>
     </queries>
 
     <application
