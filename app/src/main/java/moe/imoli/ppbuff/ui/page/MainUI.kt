@@ -230,7 +230,7 @@ object MainUI {
                     painter = painterResource(R.drawable.ic_wechat),
                     modifier = modifier.size(40.dp)
                         .clickable {
-                            ctx.openUrl("wxp://f2f0SJzwy0tIWH-Dt0rmuMkpRqDpFxt9D_hrlsKW7yF-z-h-JtzNRaFjv1g_1BLaQYe4")
+                            ctx.openUrl("https://api.qrtool.cn/?text=wxp://f2f0SJzwy0tIWH-Dt0rmuMkpRqDpFxt9D_hrlsKW7yF-z-h-JtzNRaFjv1g_1BLaQYe4")
                         },
                     contentDescription = null
                 )

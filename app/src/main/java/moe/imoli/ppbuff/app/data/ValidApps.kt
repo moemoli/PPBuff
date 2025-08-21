@@ -22,8 +22,8 @@ object ValidApps {
                 packageName = "cn.xiaochuankeji.zuiyouLite",
                 minVersionName = "2.99.168",
                 maxVersionName = "2.99.168",
-                minVersion = 0L,
-                maxVersion = 0L,
+                minVersion = 29916800L,
+                maxVersion = 29916800L,
                 settings = mutableListOf(
                     ValidAppSetting(
                         type = ValidAppSettingType.SWITCH,

@@ -1,5 +1,7 @@
 package moe.imoli.ppbuff.app.data
 
+import android.os.Bundle
+import com.highcapable.yukihookapi.hook.log.YLog
 import com.highcapable.yukihookapi.hook.xposed.prefs.YukiHookPrefsBridge
 
 data class ValidAppSetting<T>(
@@ -35,6 +37,28 @@ data class ValidAppSetting<T>(
             is Boolean -> prefs.getBoolean(label, value as Boolean)
             else -> value
         } as T
+    }
+
+    fun update(bundle: Bundle) {
+        value = when (value) {
+            is Int -> bundle.getInt(label, value as Int)
+            is Float -> bundle.getFloat(label, value as Float)
+            is String -> bundle.getString(label, value.toString())
+            is Boolean -> bundle.getBoolean(label, value as Boolean)
+            else -> value
+        } as T
+
+        YLog.debug("try update remote config $label: $value")
+    }
+
+    fun provide(bundle: Bundle) {
+        YLog.debug("try provide remote config $label: $value")
+        when (value) {
+            is Int -> bundle.putInt(label, value as Int)
+            is Float -> bundle.putFloat(label, value as Float)
+            is String -> bundle.putString(label, value.toString())
+            is Boolean -> bundle.putBoolean(label, value as Boolean)
+        }
     }
 
     fun save(value: Any) {

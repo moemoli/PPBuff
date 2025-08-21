@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
 
+        <provider android:name=".app.config.ConfigProvider"
+                  android:authorities="moe.imoli.ppbuff.provider.config"
+                  android:exported="true"/>
+
         <meta-data
                 android:name="xposedmodule"
                 android:value="true"/>
