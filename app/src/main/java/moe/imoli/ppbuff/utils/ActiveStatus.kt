@@ -10,11 +10,9 @@ object ActiveStatus {
     private val intents = mutableListOf(
         Intent().apply { setClassName("org.lsposed.npatch", "org.lsposed.lspatch.manager.ModuleService") },
         Intent().apply { setClassName("org.lsposed.lspatch", "org.lsposed.lspatch.manager.ModuleService") },
-        Intent().apply { setClassName("org.lsposed.onpatch", "org.lsposed.lspatch.manager.ModuleService") },
-        Intent().apply { setClassName("org.lsposed.opatch", "org.lsposed.lspatch.manager.ModuleService") },
-    )
+        )
 
-    fun isModuleActive(ctx: Context): Boolean {
+    fun queryPatchers(ctx: Context): MutableList<ResolveInfo> {
         val list = mutableListOf<ResolveInfo>()
         intents.forEach {
             list.addAll(
@@ -22,6 +20,6 @@ object ActiveStatus {
                     .queryIntentServices(it, PackageManager.MATCH_ALL)
             )
         }
-        return list.isNotEmpty()
+        return list
     }
 }

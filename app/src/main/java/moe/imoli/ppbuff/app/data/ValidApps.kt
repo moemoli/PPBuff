@@ -39,7 +39,7 @@ object ValidApps {
                         label = "no_water_mark",
                         value = false,
                         prefs = prefs,
-                        visible = false
+
                     ),
                     ValidAppSetting(
                         type = ValidAppSettingType.SELECT,
@@ -47,7 +47,6 @@ object ValidApps {
                         label = "video_method",
                         value = "",
                         prefs = prefs,
-                        visible = false
                     ),
                     ValidAppSetting(
                         type = ValidAppSettingType.INPUT_NUM,

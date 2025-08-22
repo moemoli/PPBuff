@@ -13,11 +13,12 @@ object HookEntry : IYukiHookXposedInit {
 
     override fun onHook() = YukiHookAPI.encase {
         ValidApps.init(prefs = prefs)
-        loadHooker(ConfigLoader())
+        loadHooker(ConfigLoader)
     }
 
 
     override fun onInit() = configs {
         isDebug = BuildConfig.DEBUG
+        System.loadLibrary("dexkit")
     }
 }

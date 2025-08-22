@@ -53,8 +53,11 @@ object MainUI {
             var name = YukiHookAPI.Status.Executor.name
 
             if (!status) {
-                status = ActiveStatus.isModuleActive(ctx)
-                if (status) name = "LSPatch"
+                val patchers = ActiveStatus.queryPatchers(ctx)
+                status = patchers.isNotEmpty()
+                if (patchers.isNotEmpty()) {
+                    name = "${patchers.first().loadLabel(ctx.packageManager)}"
+                }
 
             }
 
@@ -388,7 +391,8 @@ object MainUI {
     @DrawableRes
     fun caseIcon(name: String): Int {
         return when (name.lowercase()) {
-            "lsposed" -> R.drawable.ic_lsposed
+            "lsposed", "npatch", "lspatch" -> R.drawable.ic_lsposed
+
             else -> R.drawable.ic_unknown
         }
     }

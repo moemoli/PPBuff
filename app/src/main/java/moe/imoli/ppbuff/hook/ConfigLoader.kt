@@ -9,22 +9,29 @@ import com.highcapable.yukihookapi.hook.entity.YukiBaseHooker
 import com.highcapable.yukihookapi.hook.log.YLog
 import moe.imoli.ppbuff.HookEntry
 import moe.imoli.ppbuff.app.data.ValidApps
+import moe.imoli.ppbuff.utils.ActiveStatus
+import moe.imoli.ppbuff.utils.Caches
 
-class ConfigLoader : YukiBaseHooker() {
+object ConfigLoader : YukiBaseHooker() {
+
+    lateinit var APP: Application
+
     override fun onHook() {
         YLog.debug("Try load config for $packageName")
         // 判断是否为内置
-        val url = HookEntry::class.java.classLoader.getResource("assets/xposed_init")
-        YLog.debug("Loading $packageName from $url")
-        if ("$url".contains("lspatch")) {
-            // 远程请求模块配置
-            Application::class.java
-                .resolve()
-                .method { name = "attach" }
-                .first()
-                .hook {
-                    after {
-                        val ctx = instance as Application
+        Application::class.java
+            .resolve()
+            .method { name = "attach" }
+            .first()
+            .hook {
+                after {
+                    val ctx = instance as Application
+                    APP = ctx
+                    Caches.update(ctx)
+                    val url = HookEntry::class.java.classLoader.getResource("assets/xposed_init")
+                    YLog.debug("Loading $packageName from $url")
+                    if ("$url".contains("lspatch") || ActiveStatus.queryPatchers(ctx).isNotEmpty()) {
+                        // 远程请求模块配置
                         val uri = "content://moe.imoli.ppbuff.provider.config/".toUri()
                         val cursor = ctx.contentResolver
                             .query(uri, null, null, null, null)
@@ -44,15 +51,15 @@ class ConfigLoader : YukiBaseHooker() {
                             }
                         }
 
-
+                    } else {
+                        initHookers()
                     }
                 }
-        } else {
-            initHookers()
-        }
+            }
+
     }
 
-    fun initHookers(){
+    fun initHookers() {
         loadApp("cn.xiaochuankeji.zuiyouLite", ZuiyouLiteLoader)
     }
 }

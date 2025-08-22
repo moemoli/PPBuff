@@ -59,6 +59,7 @@ dependencies {
     // 作为 Xposed 模块使用务必添加，其它情况可选
     ksp("com.highcapable.yukihookapi:ksp-xposed:$yuki")
     implementation("androidx.core:core-ktx:1.17.0")
+    implementation("org.luckypray:dexkit:2.0.6")
     // nav3
     implementation("androidx.navigation3:navigation3-ui:$nav")
     implementation("androidx.navigation3:navigation3-runtime:$nav")
